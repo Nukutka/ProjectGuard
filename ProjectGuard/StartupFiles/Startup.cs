@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Abp.AspNetCore;
+using Abp.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProjectGuard.Ef;
+using ProjectGuard.StartupFiles;
 
 namespace ProjectGuard
 {
@@ -21,14 +21,27 @@ namespace ProjectGuard
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            services.AddAbpDbContext<ProjectGuardDbContext>(options =>
+            {
+                DbContextOptionsConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
+            });
+
+            return services.AddAbp<WebModule>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseAbp(options =>
+            {
+                options.UseAbpRequestLocalization = false;
+                options.UseCastleLoggerFactory = false;
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

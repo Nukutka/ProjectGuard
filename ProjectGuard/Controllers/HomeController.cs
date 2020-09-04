@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Abp.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProjectGuard.Models;
 
 namespace ProjectGuard.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AbpController
     {
         private readonly ILogger<HomeController> _logger;
 
