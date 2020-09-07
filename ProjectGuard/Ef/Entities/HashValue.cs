@@ -13,6 +13,9 @@
 
         }
 
+        /// <summary>
+        /// full path
+        /// </summary>
         public string FileName { get; set; }
         public string Hash { get; set; }
     }

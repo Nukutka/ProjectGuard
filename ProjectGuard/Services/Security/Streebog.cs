@@ -149,9 +149,9 @@ namespace ProjectGuard.Services.Security
         /// </summary>
         /// <param name="input">Входная строка</param>
         /// <param name="n">длина хеш-кода: true - 256, false - 512</param>
-        public static string GetHashCode(string input, bool n = false)
+        public static string GetHashCode(byte[] M, bool n = false)
         {
-            byte[] M = input.ToHexString().ToByteArray();
+            //byte[] M = input.ToHexString().ToByteArray();
             // Этап 1 - инициализация начальных параметров
             byte[] IV = n ? vector1 : vector0;
             byte[] h = IV;
