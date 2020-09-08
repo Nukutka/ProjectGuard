@@ -12,27 +12,11 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 <body>
-    <div class="row admin-sub-header">
-        <div class="col-md-8 col-sm-8 col-8 site-breadcrumb">
-            <div id="wrap">
-                <span id="main-module-name">Project guard</span>
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-lg-2 col-md-3 col-sm-4 col-12 project-sidebar">
-            <div class="project-list">Проекты</div>
-            <ul class="main-list-box">
-                @foreach (var project in Model.Projects)
-                {
-                    <li>@project.Name</li>
-                }
-            </ul>
-            <div class="col-md-1">
-                <button class="btn btn-primary btn-sm pl-3 pr-3"> + New</button>
-            </div>
+            @Html.Partial("ProjectList", Model.Projects)
         </div>
+        <br />
         <div class="col-lg-10 col-md-9 col-sm-8 col-12 project-space">
             <div class="row project-table-head">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-12">Файл</div>

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProjectGuard.Ef;
@@ -9,9 +10,10 @@ using ProjectGuard.Ef;
 namespace ProjectGuard.Migrations
 {
     [DbContext(typeof(ProjectGuardDbContext))]
-    partial class ProjectGuardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200908062916_AddPathToProject")]
+    partial class AddPathToProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,9 +39,6 @@ namespace ProjectGuard.Migrations
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("NeedHash")
-                        .HasColumnType("boolean");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("integer");
@@ -96,7 +95,7 @@ namespace ProjectGuard.Migrations
             modelBuilder.Entity("ProjectGuard.Ef.Entities.HashValue", b =>
                 {
                     b.HasOne("ProjectGuard.Ef.Entities.Project", "Project")
-                        .WithMany("HashValues")
+                        .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

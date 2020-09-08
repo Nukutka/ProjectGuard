@@ -1,0 +1,19 @@
+﻿@model ProjectGuard.Ef.Entities.Project
+
+@{
+    ViewData["Title"] = "Новый проект";
+}
+
+<div class="col-md-2">
+    <form method="post" action="AddProject">
+        <div class="form-group">
+            <label>Название проекта:</label><br />
+            <input type="text" name="name" class="form-control" /><br />
+            <label>Путь к проекту:</label><br />
+            <input type="text" name="path" class="form-control" /><br />
+            <input type="submit" value="Добавить" class="btn btn-primary mb-2" />
+            <input type="button" onclick="history.back();" value="Отмена" class="btn btn-primary mb-2" />
+        </div>
+    </form>
+</div>
+

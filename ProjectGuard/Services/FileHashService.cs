@@ -26,7 +26,7 @@ namespace ProjectGuard.Services
             {
                 var fileBytes = File.ReadAllBytes(filePath);
                 var hash = Streebog.GetHashCode(fileBytes);
-                var hashValue = new HashValue(filePath, hash);
+                var hashValue = new HashValue(filePath, true, hash);
                 hashValues.Add(hashValue);
             }
 
