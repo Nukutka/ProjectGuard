@@ -1,5 +1,6 @@
 ﻿using Abp.AspNetCore;
 using Abp.Configuration.Startup;
+using Abp.EntityFrameworkCore;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +8,8 @@ using Microsoft.Extensions.Configuration;
 namespace ProjectGuard.StartupFiles
 {
     [DependsOn(
-          typeof(AbpAspNetCoreModule)
+          typeof(AbpAspNetCoreModule),
+          typeof(AbpEntityFrameworkCoreModule)
       )]
     public class WebModule : AbpModule
     {

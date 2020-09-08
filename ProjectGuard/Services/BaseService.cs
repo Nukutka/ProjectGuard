@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace ProjectGuard.Services
 {
-    public class BaseService : ApplicationService
+    public class DataService : ApplicationService
     {
         protected IocManager _ioc;
         protected Dictionary<Type, IRepository> _repositories;
 
-        public BaseService()
+        public DataService()
         {
             _ioc = IocManager.Instance;
             _repositories = new Dictionary<Type, IRepository>();
@@ -23,31 +23,31 @@ namespace ProjectGuard.Services
 
         #region Repository
 
-        protected IQueryable<TEntity> GetAllQuery<TEntity>()
+        public IQueryable<TEntity> GetAllQuery<TEntity>()
             where TEntity : BaseEntity
         {
             return GetRepository<TEntity>().GetAll();
         }
 
-        protected async Task<List<TEntity>> GetAllListAsync<TEntity>()
+        public async Task<List<TEntity>> GetAllListAsync<TEntity>()
             where TEntity : BaseEntity
         {
             return await GetAllQuery<TEntity>().ToListAsync();
         }
 
-        protected TEntity Get<TEntity>(int id)
+        public TEntity Get<TEntity>(int id)
             where TEntity : BaseEntity
         {
             return GetRepository<TEntity>().FirstOrDefault(id);
         }
 
-        protected async Task<TEntity> GetAsync<TEntity>(int id)
+        public async Task<TEntity> GetAsync<TEntity>(int id)
             where TEntity : BaseEntity
         {
             return await GetRepository<TEntity>().FirstOrDefaultAsync(id);
         }
 
-        protected TEntity Insert<TEntity>(TEntity entity)
+        public TEntity Insert<TEntity>(TEntity entity)
             where TEntity : BaseEntity
         {
             entity.Id = 0;
@@ -55,7 +55,7 @@ namespace ProjectGuard.Services
             return entity;
         }
 
-        protected async Task<TEntity> InsertAsync<TEntity>(TEntity entity)
+        public async Task<TEntity> InsertAsync<TEntity>(TEntity entity)
             where TEntity : BaseEntity
         {
             entity.Id = 0;
@@ -63,34 +63,34 @@ namespace ProjectGuard.Services
             return entity;
         }
 
-        protected TEntity Update<TEntity>(int id, TEntity entity)
+        public TEntity Update<TEntity>(int id, TEntity entity)
             where TEntity : BaseEntity
         {
             entity.Id = id;
             return GetRepository<TEntity>().Update(entity);
         }
 
-        protected async Task<TEntity> UpdateAsync<TEntity>(int id, TEntity entity)
+        public async Task<TEntity> UpdateAsync<TEntity>(int id, TEntity entity)
             where TEntity : BaseEntity
         {
             entity.Id = id;
             return await GetRepository<TEntity>().UpdateAsync(entity);
         }
 
-        protected void Delete<TEntity>(int id)
+        public void Delete<TEntity>(int id)
             where TEntity : BaseEntity
         {
             GetRepository<TEntity>().Delete(id);
         }
 
-        protected async Task DeleteAsync<TEntity>(int id)
+        public async Task DeleteAsync<TEntity>(int id)
             where TEntity : BaseEntity
         {
             await GetRepository<TEntity>().DeleteAsync(id);
         }
 
         // TODO: bulk :)
-        protected async Task BulkInsertAsync<TEntity>(IEnumerable<TEntity> entities)
+        public async Task BulkInsertAsync<TEntity>(IEnumerable<TEntity> entities)
             where TEntity : BaseEntity
         {
             var repository = GetRepository<TEntity>();
@@ -104,7 +104,7 @@ namespace ProjectGuard.Services
             });
         }
 
-        protected async Task BulkDeleteAsync<TEntity>(IEnumerable<TEntity> entities)
+        public async Task BulkDeleteAsync<TEntity>(IEnumerable<TEntity> entities)
             where TEntity : BaseEntity
         {
             var repository = GetRepository<TEntity>();
@@ -118,7 +118,7 @@ namespace ProjectGuard.Services
             });
         }
 
-        protected IRepository<TEntity> GetRepository<TEntity>()
+        public IRepository<TEntity> GetRepository<TEntity>()
             where TEntity : BaseEntity
         {
             var entityType = typeof(TEntity);

@@ -38,9 +38,35 @@ namespace ProjectGuard.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("ProjectId");
+
                     b.ToTable("HashValues");
+                });
+
+            modelBuilder.Entity("ProjectGuard.Ef.Entities.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("ProjectGuard.Ef.Entities.User", b =>
@@ -59,6 +85,15 @@ namespace ProjectGuard.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ProjectGuard.Ef.Entities.HashValue", b =>
+                {
+                    b.HasOne("ProjectGuard.Ef.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

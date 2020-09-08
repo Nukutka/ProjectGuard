@@ -9,8 +9,15 @@ using System.Threading.Tasks;
 
 namespace ProjectGuard.Services
 {
-    public class FileHashService : BaseService
+    public class FileHashService
     {
+        private readonly DataService _dataService;
+
+        public FileHashService(DataService dataService)
+        {
+            _dataService = dataService;
+        }
+
         public async Task SetControlHashesAsync(List<string> filePaths)
         {
             var hashValues = new List<HashValue>();
@@ -23,14 +30,14 @@ namespace ProjectGuard.Services
                 hashValues.Add(hashValue);
             }
 
-            await BulkInsertAsync<HashValue>(hashValues);
+            await _dataService.BulkInsertAsync<HashValue>(hashValues);
         }
 
         public async Task<List<CheckFileHashesOutput>> CheckFileHashesAsync(List<string> filePaths)
         {
             var result = new List<CheckFileHashesOutput>();
 
-            var dbHashValues = await GetAllQuery<HashValue>()
+            var dbHashValues = await _dataService.GetAllQuery<HashValue>()
                 .Where(h => filePaths.Contains(h.FileName))
                 .ToListAsync();
 

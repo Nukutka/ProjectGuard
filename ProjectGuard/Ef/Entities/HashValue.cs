@@ -18,5 +18,7 @@
         /// </summary>
         public string FileName { get; set; }
         public string Hash { get; set; }
+        public Project Project { get; set; }
+        public int ProjectId { get; set; }
     }
 }

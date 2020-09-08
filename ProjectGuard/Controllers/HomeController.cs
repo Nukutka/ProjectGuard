@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using ProjectGuard.Ef.Entities;
 using ProjectGuard.Models;
+using ProjectGuard.Services;
 
 namespace ProjectGuard.Controllers
 {
     public class HomeController : AbpController
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly DataService _dataService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(DataService dataService)
         {
-            _logger = logger;
+            _dataService = dataService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            var projects = await _dataService.GetAllListAsync<Project>();
+            var indexViewModel = new IndexViewModel(projects);
 
-        public IActionResult Privacy()
-        {
-            return View();
+            return View(indexViewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
