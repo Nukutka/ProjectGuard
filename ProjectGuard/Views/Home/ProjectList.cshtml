@@ -4,7 +4,7 @@
 <ul class="list-group">
     @foreach (var project in Model)
     {
-        <li class="list-group-item">@project.Name</li>
+        <li class="list-group-item" onclick="location.href='@Url.Action("SelectProject", "Home", new { projectId = project.Id })'">@project.Name</li>
     }
 </ul>
 <div class="col-md-1">

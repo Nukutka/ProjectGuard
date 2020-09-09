@@ -1,0 +1,20 @@
+﻿@model ProjectGuard.Ef.Entities.Project
+
+<div class="row project-table-head">
+    <div class="col-lg-3 col-md-3 col-sm-3 col-12">Файл</div>
+    <div class="col-lg-2 col-md-3 col-sm-3 col-12">Требуется проверка</div>
+    <div class="col-lg-2 col-md-3 col-sm-3 col-12">Хеш-значение</div>
+    <div class="col-lg-4 col-md-3 col-sm-3 col-12"></div>
+</div>
+@if (Model != null)
+{
+    @foreach (var hashValue in Model.HashValues)
+    {
+        <div class="row project-table-data-row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-12 data-name"><i class="fas fa-folder project-file-icon"></i> <a href="" title="Formulae">@hashValue.FileName</a></div>
+            <div class="col-lg-2 col-md-3 col-sm-3 col-12 data-info">@hashValue.NeedHash</div>
+            <div class="col-lg-2 col-md-3 col-sm-3 col-12 data-info">@hashValue.Hash</div>
+            <div class="col-lg-4 col-md-3 col-sm-3 col-12 data-info"></div>
+        </div>
+    }
+}

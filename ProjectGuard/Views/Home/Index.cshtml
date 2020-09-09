@@ -18,26 +18,7 @@
         </div>
         <br />
         <div class="col-lg-10 col-md-9 col-sm-8 col-12 project-space">
-            <div class="row project-table-head">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-12">Файл</div>
-                <div class="col-lg-2 col-md-3 col-sm-3 col-12">Дата изменения</div>
-                <div class="col-lg-4 col-md-3 col-sm-3 col-12"></div>
-            </div>
-            <div class="row project-table-data-row">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-12 data-name"><i class="fas fa-folder project-file-icon"></i> <a href="" title="Formulae">Formulae</a></div>
-                <div class="col-lg-2 col-md-3 col-sm-3 col-12 data-info">23/11/2018 15:30</div>
-                <div class="col-lg-4 col-md-3 col-sm-3 col-12 data-info"></div>
-            </div>
-            <div class="row project-table-data-row">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-12 data-name"><i class="fas fa-folder project-file-icon"></i> <a href="" title="Diagrams">Diagrams</a></div>
-                <div class="col-lg-2 col-md-3 col-sm-3 col-12 data-info">23/11/2018 15:30</div>
-                <div class="col-lg-4 col-md-3 col-sm-3 col-12 data-info"></div>
-            </div>
-            <div class="row project-table-data-row">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-12 data-name"><i class="fas fa-folder project-file-icon"></i> <a href="" title="Previous Year Question Papers">Previous Year Question Papers</a></div>
-                <div class="col-lg-2 col-md-3 col-sm-3 col-12 data-info">23/11/2018 15:30</div>
-                <div class="col-lg-4 col-md-3 col-sm-3 col-12 data-info"></div>
-            </div>
+            @Html.Partial("ProjectFiles", Model.Projects.FirstOrDefault(p => p.Id == int.Parse(ViewData["SelectedProjectId"].ToString())))
         </div>
     </div>
 </body>

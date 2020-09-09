@@ -26,7 +26,8 @@ namespace ProjectGuard.Services
                 hashValues.Add(hashValue);
             }
 
-            var project = new Project(name, path, hashValues);
+            var project = new Project(name, path);
+            project.HashValues = hashValues;
             await _dataService.InsertAsync(project);
 
             return project;
