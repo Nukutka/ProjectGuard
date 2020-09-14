@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,13 @@ namespace ProjectGuard.Controllers
     {
         private readonly DataService _dataService;
         private readonly ProjectService _projectService;
+        private readonly FileHashService _fileHashService;
 
-        public HomeController(DataService dataService, ProjectService projectService)
+        public HomeController(DataService dataService, ProjectService projectService, FileHashService fileHashService)
         {
             _dataService = dataService;
             _projectService = projectService;
+            _fileHashService = fileHashService;
         }
 
         public async Task<IActionResult> Index()
@@ -51,6 +54,28 @@ namespace ProjectGuard.Controllers
 
             ViewData["SelectedProjectId"] = 0;
 
+            return View("Index", indexViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> HashFiles(int[] hashValueIds, int projectId)
+        {
+            await _fileHashService.SetControlHashesAsync(hashValueIds, projectId);
+
+            var indexViewModel = await CreateIndexViewModel();
+            ViewData["SelectedProjectId"] = 0;
+            return View("Index", indexViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckFiles(int[] hashValueIds, int projectId)
+        {
+            await _fileHashService.CheckFileHashesAsync(projectId);
+
+            var indexViewModel = await CreateIndexViewModel();
+            ViewData["SelectedProjectId"] = 0;
+
+            // TODO: result
             return View("Index", indexViewModel);
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Abp.Application.Services;
+using Microsoft.EntityFrameworkCore;
 using ProjectGuard.Ef.Entities;
 using ProjectGuard.Models.Requests;
 using ProjectGuard.Services.Security;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ProjectGuard.Services
 {
-    public class FileHashService
+    public class FileHashService : ApplicationService
     {
         private readonly DataService _dataService;
 
@@ -18,46 +19,55 @@ namespace ProjectGuard.Services
             _dataService = dataService;
         }
 
-        public async Task SetControlHashesAsync(List<string> filePaths)
+        public async Task SetControlHashesAsync(int[] hashValueIds, int projectId)
         {
-            var hashValues = new List<HashValue>();
-
-            foreach (var filePath in filePaths)
-            {
-                var fileBytes = File.ReadAllBytes(filePath);
-                var hash = Streebog.GetHashCode(fileBytes);
-                var hashValue = new HashValue(filePath, true, hash);
-                hashValues.Add(hashValue);
-            }
-
-            await _dataService.BulkInsertAsync<HashValue>(hashValues);
-        }
-
-        public async Task<List<CheckFileHashesOutput>> CheckFileHashesAsync(List<string> filePaths)
-        {
-            var result = new List<CheckFileHashesOutput>();
-
-            var dbHashValues = await _dataService.GetAllQuery<HashValue>()
-                .Where(h => filePaths.Contains(h.FileName))
+            var hashValues = await _dataService.GetAllQuery<HashValue>()
+                .Where(h => h.ProjectId == projectId)
                 .ToListAsync();
 
-            foreach (var filePath in filePaths)
+            foreach (var hashValue in hashValues)
             {
-                var fileBytes = File.ReadAllBytes(filePath);
-                var hash = Streebog.GetHashCode(fileBytes);
-
-                var dbHashValue = dbHashValues.FirstOrDefault(h => h.FileName == filePath);
-                if (dbHashValue == null)
+                if (hashValueIds.Contains(hashValue.Id))
                 {
-                    result.Add(new CheckFileHashesOutput(filePath, false, "Контрольное значения для файла отсутсвует."));
-                }
-                else if (dbHashValue.Hash != hash)
-                {
-                    result.Add(new CheckFileHashesOutput(filePath, false, "Контрольное значение не совпадает с текущим."));
+                    var fileBytes = File.ReadAllBytes(hashValue.FileName);
+                    var hash = Streebog.GetHashCode(fileBytes);
+                    hashValue.NeedHash = true;
+                    hashValue.Hash = hash;
                 }
                 else
                 {
-                    result.Add(new CheckFileHashesOutput(filePath, true, ""));
+                    hashValue.NeedHash = false;
+                }
+            }
+        }
+
+        public async Task<List<CheckFileHashesOutput>> CheckFileHashesAsync(int projectId)
+        {
+            var result = new List<CheckFileHashesOutput>();
+
+            var hashValues = await _dataService.GetAllQuery<HashValue>()
+                .Where(h => h.ProjectId == projectId)
+                .ToListAsync();
+
+            foreach (var hashValue in hashValues)
+            {
+                if (hashValue.NeedHash)
+                {
+                    var fileBytes = File.ReadAllBytes(hashValue.FileName);
+                    var hash = Streebog.GetHashCode(fileBytes);
+
+                    if (hashValue.Hash == null)
+                    {
+                        result.Add(new CheckFileHashesOutput(hashValue.FileName, false, "Контрольное значения для файла отсутсвует."));
+                    }
+                    else if (hashValue.Hash != hash)
+                    {
+                        result.Add(new CheckFileHashesOutput(hashValue.FileName, false, "Контрольное значение не совпадает с текущим."));
+                    }
+                    else
+                    {
+                        result.Add(new CheckFileHashesOutput(hashValue.FileName, true, ""));
+                    }
                 }
             }
 
