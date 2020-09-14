@@ -8,11 +8,12 @@ namespace ProjectGuard.Ef.Entities
         {
             Name = name;
             Path = path;
+            HashValues = new List<HashValue>();
         }
 
         public Project()
         {
-
+            HashValues = new List<HashValue>();
         }
 
         public string Name { get; set; }

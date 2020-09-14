@@ -188,6 +188,7 @@ namespace ProjectGuard.Services.Security
         private static byte[] AddMod512(byte[] a, byte[] b)
         {
             byte[] tmp = (new BigInteger(a) + new BigInteger(b) % BigInteger.Pow(2, 512)).ToByteArray();
+            if (tmp.Length > 64) tmp = tmp.Take(64).ToArray(); // откуда-то берется нулевый байт
             byte[] res = new byte[64];
             Array.Copy(tmp, 0, res, 0, tmp.Length);
             return res;

@@ -1,0 +1,18 @@
+﻿@model IndexViewModel
+@{
+    ViewData["Title"] = "Главная";
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <div class="row">
+        <div class="col-lg-2 col-md-3 col-sm-4 col-12 project-sidebar">
+            @await Html.PartialAsync("~/Views/Project/ProjectList.cshtml", Model.Projects)
+        </div>
+        <br />
+        <div class="col-lg-10 col-md-9 col-sm-8 col-12 project-space" id="projectFilesPart">
+            @await Html.PartialAsync("~/Views/Hash/ProjectFileList.cshtml", new ProjectGuard.Ef.Entities.Project())
+        </div>
+    </div>
+</body>
+</html>

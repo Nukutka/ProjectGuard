@@ -1,4 +1,33 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$(document).ready(function () {
+    $('.list-group-item').click(function () {
+        $.ajax(
+            {
+                url: 'Project/SelectProject', // Как сделать тут переменную шарпа с путем ????!
+                type: 'GET',
+                data: { projectId: $(this).val() },
 
-// Write your JavaScript code.
+                success: function (partialView) {
+                    $('#projectFilesPart').html(partialView);
+                    $('#projectFilesPart').show();
+                }
+            });
+    });
+});
+
+function hashFile() {
+    var formdata = $("#filesForm").serialize();
+
+    $.ajax({
+        url: "/Hash/HashFiles",
+        type: "POST",
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        data: formdata,
+
+        success: function (partialView) {
+            $('#projectFilesPart').html(partialView);
+            $('#projectFilesPart').show();
+        }
+    });
+};
+

@@ -1,0 +1,15 @@
+﻿@model IEnumerable<ProjectGuard.Ef.Entities.Project>
+
+<div class="project-list">Проекты</div>
+<ul class="list-group">
+    @foreach (var project in Model)
+    {
+        <li class="list-group-item" value="@project.Id">@project.Name</li>
+    }
+</ul>
+<br />
+<div class="col-md-1">
+    @Html.ActionLink("New", "AddProject", "Project", null, new { @class="btn btn-primary btn-sm pl-3 pr-3", @role="button" })
+</div>
+
+    
