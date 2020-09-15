@@ -29,9 +29,9 @@ namespace ProjectGuard.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckFiles(int projectId)
+        public async Task<IActionResult> CheckFiles(int[] hashValueIds, int projectId)
         {
-            await _fileHashService.CheckFileHashesAsync(projectId);
+            await _fileHashService.CheckFileHashesAsync(hashValueIds, projectId);
 
             // TODO: result
             var project = await _dataService.GetAllQuery<Project>()

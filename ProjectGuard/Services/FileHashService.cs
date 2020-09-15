@@ -41,7 +41,8 @@ namespace ProjectGuard.Services
             }
         }
 
-        public async Task<List<CheckFileHashesOutput>> CheckFileHashesAsync(int projectId)
+        // TODO: поменять модель
+        public async Task<List<CheckFileHashesOutput>> CheckFileHashesAsync(int[] hashValueIds, int projectId)
         {
             var result = new List<CheckFileHashesOutput>();
 
@@ -49,27 +50,40 @@ namespace ProjectGuard.Services
                 .Where(h => h.ProjectId == projectId)
                 .ToListAsync();
 
+            var verification = new Verification(true);
+
             foreach (var hashValue in hashValues)
             {
-                if (hashValue.NeedHash)
+                if (hashValue.NeedHash && hashValueIds.Contains(hashValue.Id))
                 {
+                    var fileCheckResult = new FileCheckResult(hashValue.Id);
+
                     var fileBytes = File.ReadAllBytes(hashValue.FileName);
                     var hash = Streebog.GetHashCode(fileBytes);
 
                     if (hashValue.Hash == null)
                     {
+                        verification.Result = false;
+                        fileCheckResult.Result = false;
                         result.Add(new CheckFileHashesOutput(hashValue.FileName, false, "Контрольное значения для файла отсутсвует."));
                     }
                     else if (hashValue.Hash != hash)
                     {
+                        verification.Result = false;
+                        fileCheckResult.Result = false;
                         result.Add(new CheckFileHashesOutput(hashValue.FileName, false, "Контрольное значение не совпадает с текущим."));
                     }
                     else
                     {
+                        fileCheckResult.Result = true;
                         result.Add(new CheckFileHashesOutput(hashValue.FileName, true, ""));
                     }
+
+                    verification.FileCheckResults.Add(fileCheckResult);
                 }
             }
+
+            await _dataService.InsertAsync<Verification>(verification);
 
             return result;
         }

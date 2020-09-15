@@ -9,6 +9,8 @@ namespace ProjectGuard.Ef
         public DbSet<HashValue> HashValues { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Verification> Verifications { get; set; }
+        public DbSet<FileCheckResult> FileCheckResults { get; set; }
 
         public ProjectGuardDbContext(DbContextOptions options) : base(options) { }
 
