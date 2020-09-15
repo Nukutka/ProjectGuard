@@ -20,9 +20,9 @@
                     <a href="" title="Formulae">@hashValue.FileName</a>
                 </div>
 
-                <div class="col-sm-3 data-info">
+                <div class="col-3">
                     @*@Html.CheckBox("hashValueIds", null, new { @class = "form-check-input", @value = @hashValue.Id, @checked = @hashValue.NeedHash }) //это не работает D:*@
-                    <input class="form-check-input" type="checkbox" value="@hashValue.Id" checked="@hashValue.NeedHash" name="hashValueIds">
+                    <input type="checkbox" value="@hashValue.Id" checked="@hashValue.NeedHash" name="hashValueIds">
                 </div>
 
                 <div class="col-3 data-info">@hashValue.Hash</div>
@@ -30,10 +30,8 @@
             </div>
         }
         <div class="row">
-            @*<input type="submit" value="Хешировать" formaction="Hash/HashFiles" formmethod="post" class="btn btn-primary mb-2" />
-            <input type="submit" value="Проверить" formaction="Hash/CheckFiles" formmethod="post" class="btn btn-primary mb-2" />*@
-            <button type="button" onclick="hashFile()">Хешировать</button>
-            @*<input type="button" value="Хешировать" class="btn btn-primary mb-2" id="hashButton" />*@
+            <button type="button" class="btn btn-dark button-marg" onclick="hashFiles()">Хешировать</button>
+            <button type="button" class="btn btn-dark button-marg" onclick="checkFiles()">Проверить</button>
         </div>
     }
 }

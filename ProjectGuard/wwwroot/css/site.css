@@ -4,7 +4,6 @@
 
 .admin-sub-header {
     background: #021428;
-    border-bottom: 1px solid #B5F5F5;
     padding: 0.3em 0em;
     color: #ffffff;
     text-shadow: 0pt 0pt 2pt #000;
@@ -65,8 +64,11 @@
         }
 
     .project-sidebar a {
-        color: #222;
-        text-shadow: 0pt 0pt 1pt #eee;
+        color: #ffffff;
+        margin-top: 15px;
+        margin-left: 20px;
+        margin-right: 20px;
+        display: block;
     }
 
         .project-sidebar a:hover {
@@ -144,3 +146,39 @@
             vertical-align: middle;
             margin: auto 0;
         }
+
+.list-rectangle {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .list-rectangle > li {
+        position: relative;
+        display: block;
+        margin-bottom: .25rem;
+        padding: .325rem .825rem .325rem 1.325rem;
+        color: #000000;
+        background: #e8e8e8;
+    }
+
+        .list-rectangle > li:last-child {
+            margin-bottom: 0;
+        }
+
+        .list-rectangle > li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0.5rem;
+            background: #000000;
+        }
+
+.button-marg {
+    margin-top: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    display: block;
+}
