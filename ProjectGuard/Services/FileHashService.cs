@@ -19,7 +19,7 @@ namespace ProjectGuard.Services
             _dataService = dataService;
         }
 
-        public async Task SetControlHashesAsync(int[] hashValueIds, int projectId)
+        public async Task SetControlHashesAsync(int projectId)
         {
             var hashValues = await _dataService.GetAllQuery<HashValue>()
                 .Where(h => h.ProjectId == projectId)
@@ -27,22 +27,17 @@ namespace ProjectGuard.Services
 
             foreach (var hashValue in hashValues)
             {
-                if (hashValueIds.Contains(hashValue.Id))
+                if (hashValue.NeedHash)
                 {
                     var fileBytes = File.ReadAllBytes(hashValue.FileName);
                     var hash = Streebog.GetHashCode(fileBytes);
-                    hashValue.NeedHash = true;
                     hashValue.Hash = hash;
-                }
-                else
-                {
-                    hashValue.NeedHash = false;
                 }
             }
         }
 
         // TODO: поменять модель
-        public async Task<List<CheckFileHashesOutput>> CheckFileHashesAsync(int[] hashValueIds, int projectId)
+        public async Task<List<CheckFileHashesOutput>> CheckFileHashesAsync(int projectId)
         {
             var result = new List<CheckFileHashesOutput>();
 
@@ -50,11 +45,11 @@ namespace ProjectGuard.Services
                 .Where(h => h.ProjectId == projectId)
                 .ToListAsync();
 
-            var verification = new Verification(true);
+            var verification = new Verification(true, projectId);
 
             foreach (var hashValue in hashValues)
             {
-                if (hashValue.NeedHash && hashValueIds.Contains(hashValue.Id))
+                if (hashValue.NeedHash)
                 {
                     var fileCheckResult = new FileCheckResult(hashValue.Id);
 
@@ -86,6 +81,12 @@ namespace ProjectGuard.Services
             await _dataService.InsertAsync<Verification>(verification);
 
             return result;
+        }
+
+        public async Task ChangeFileNeedHash(int fileId, bool needHash)
+        {
+            var hashValue = await _dataService.GetAsync<HashValue>(fileId);
+            hashValue.NeedHash = needHash;
         }
     }
 }

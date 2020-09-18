@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="col">
-                        <input type="checkbox" value="@hashValue.Id" checked="@hashValue.NeedHash" id="@checkboxId" name="hashValueIds">
+                        <input type="checkbox" value="@hashValue.Id" checked="@hashValue.NeedHash" id="@checkboxId" name="hashValueIds" onClick="changeFileNeedHash(@hashValue.Id, this.checked)">
                     </div>
 
                     <div class="col data-name">@hashValue.Hash</div>

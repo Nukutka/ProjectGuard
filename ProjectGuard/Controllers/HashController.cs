@@ -21,13 +21,8 @@ namespace ProjectGuard.Controllers
         [HttpPost]
         public async Task<IActionResult> HashFiles(int[] hashValueIds, int projectId)
         {
-            await _fileHashService.SetControlHashesAsync(hashValueIds, projectId);
-
-            var project = await _dataService.GetAllQuery<Project>()
-                .Include(p => p.HashValues)
-                .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            var projectFileListViewModel = _projectService.GetProjectFilesViewModel(project);
+            await _fileHashService.SetControlHashesAsync(projectId);
+            var projectFileListViewModel = await _projectService.GetProjectFilesViewModel(projectId);
 
             return PartialView("~/Views/Hash/ProjectFileList.cshtml", projectFileListViewModel);
         }
@@ -35,16 +30,16 @@ namespace ProjectGuard.Controllers
         [HttpPost]
         public async Task<IActionResult> CheckFiles(int[] hashValueIds, int projectId)
         {
-            await _fileHashService.CheckFileHashesAsync(hashValueIds, projectId);
-
-            // TODO: result
-            var project = await _dataService.GetAllQuery<Project>()
-                .Include(p => p.HashValues)
-                .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            var projectFileListViewModel = _projectService.GetProjectFilesViewModel(project);
+            await _fileHashService.CheckFileHashesAsync(projectId);
+            var projectFileListViewModel = await _projectService.GetProjectFilesViewModel(projectId);
 
             return PartialView("~/Views/Hash/ProjectFileList.cshtml", projectFileListViewModel);
+        }
+
+        [HttpPost]
+        public async Task ChangeNeedHash(int fileId, bool needHash)
+        {
+            await _fileHashService.ChangeFileNeedHash(fileId, needHash);
         }
     }
 }

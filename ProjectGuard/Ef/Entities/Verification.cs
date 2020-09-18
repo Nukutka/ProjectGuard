@@ -4,9 +4,10 @@ namespace ProjectGuard.Ef.Entities
 {
     public class Verification : BaseEntity
     {
-        public Verification(bool result)
+        public Verification(bool result, int projectId)
         {
             Result = result;
+            ProjectId = projectId;
             FileCheckResults = new List<FileCheckResult>();
         }
 
@@ -20,5 +21,7 @@ namespace ProjectGuard.Ef.Entities
         /// </summary>
         public bool Result { get; set; }
         public ICollection<FileCheckResult> FileCheckResults { get; set; }
+        public int ProjectId { get; set; }
+        public Project Project { get; set; }
     }
 }

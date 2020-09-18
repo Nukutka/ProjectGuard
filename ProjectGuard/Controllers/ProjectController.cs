@@ -27,11 +27,7 @@ namespace ProjectGuard.Controllers
         [HttpGet]
         public async Task<IActionResult> SelectProject(int projectId)
         {
-            var project = await _dataService.GetAllQuery<Project>()
-                .Include(p => p.HashValues)
-                .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            var projectFileListViewModel = _projectService.GetProjectFilesViewModel(project);
+            var projectFileListViewModel = await _projectService.GetProjectFilesViewModel(projectId);
 
             return PartialView("~/Views/Hash/ProjectFileList.cshtml", projectFileListViewModel);
         }

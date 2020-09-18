@@ -3,7 +3,9 @@ using Abp.Configuration.Startup;
 using Abp.EntityFrameworkCore;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
+using Abp.Threading.BackgroundWorkers;
 using Microsoft.Extensions.Configuration;
+using ProjectGuard.Services.Background;
 
 namespace ProjectGuard.StartupFiles
 {
@@ -30,6 +32,12 @@ namespace ProjectGuard.StartupFiles
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(typeof(WebModule).GetAssembly());
+        }
+
+        public override void PostInitialize()
+        {
+            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+            workManager.Add(IocManager.Resolve<ProjectChecker>());
         }
     }
 }

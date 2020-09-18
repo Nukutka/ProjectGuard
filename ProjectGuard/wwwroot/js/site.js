@@ -60,3 +60,12 @@ function selectCheckboxes(id, checked) {
     }
 }
 
+function changeFileNeedHash(fileId, needHash) {
+    $.ajax({
+        url: "/Hash/ChangeNeedHash",
+        type: "POST",
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        data: { fileId, needHash }
+    });
+}
+

@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Microsoft.EntityFrameworkCore;
 using ProjectGuard.Ef.Entities;
 using ProjectGuard.Models;
 using System;
@@ -40,8 +41,13 @@ namespace ProjectGuard.Services
         /// Создаст дерево каталогов и файлов (костыль, т.к. я не хочу ради этого править бд)
         /// </summary>
         /// <param name="project">Include ProjectFiles</param>
-        public ProjectFileListViewModel GetProjectFilesViewModel(Project project)
+        public async Task<ProjectFileListViewModel> GetProjectFilesViewModel(int projectId)
         {
+            // TODO: result
+            var project = await _dataService.GetAllQuery<Project>()
+                .Include(p => p.HashValues)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
+
             var projectListViewModel = new ProjectFileListViewModel(project);
             var projectDirectories = new List<ProjectDirectory>();
 
