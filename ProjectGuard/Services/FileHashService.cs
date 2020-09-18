@@ -37,15 +37,16 @@ namespace ProjectGuard.Services
         }
 
         // TODO: поменять модель
-        public async Task<List<CheckFileHashesOutput>> CheckFileHashesAsync(int projectId)
+        public async Task<Verification> CheckFileHashesAsync(int projectId)
         {
-            var result = new List<CheckFileHashesOutput>();
-
             var hashValues = await _dataService.GetAllQuery<HashValue>()
                 .Where(h => h.ProjectId == projectId)
                 .ToListAsync();
 
+            var project = await _dataService.GetAsync<Project>(projectId);
+
             var verification = new Verification(true, projectId);
+            verification.Project = project;
 
             foreach (var hashValue in hashValues)
             {
@@ -60,18 +61,18 @@ namespace ProjectGuard.Services
                     {
                         verification.Result = false;
                         fileCheckResult.Result = false;
-                        result.Add(new CheckFileHashesOutput(hashValue.FileName, false, "Контрольное значения для файла отсутсвует."));
+                        fileCheckResult.Message = "Контрольное значения для файла отсутсвует.";
                     }
                     else if (hashValue.Hash != hash)
                     {
                         verification.Result = false;
                         fileCheckResult.Result = false;
-                        result.Add(new CheckFileHashesOutput(hashValue.FileName, false, "Контрольное значение не совпадает с текущим."));
+                        fileCheckResult.Message = "Контрольное значение не совпадает с текущим.";
                     }
                     else
                     {
                         fileCheckResult.Result = true;
-                        result.Add(new CheckFileHashesOutput(hashValue.FileName, true, ""));
+                        fileCheckResult.Message = "Нормас";
                     }
 
                     verification.FileCheckResults.Add(fileCheckResult);
@@ -80,7 +81,7 @@ namespace ProjectGuard.Services
 
             await _dataService.InsertAsync<Verification>(verification);
 
-            return result;
+            return verification;
         }
 
         public async Task ChangeFileNeedHash(int fileId, bool needHash)

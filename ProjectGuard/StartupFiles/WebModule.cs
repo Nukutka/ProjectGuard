@@ -1,6 +1,7 @@
 ﻿using Abp.AspNetCore;
 using Abp.Configuration.Startup;
 using Abp.EntityFrameworkCore;
+using Abp.MailKit;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Threading.BackgroundWorkers;
@@ -11,7 +12,8 @@ namespace ProjectGuard.StartupFiles
 {
     [DependsOn(
           typeof(AbpAspNetCoreModule),
-          typeof(AbpEntityFrameworkCoreModule)
+          typeof(AbpEntityFrameworkCoreModule),
+          typeof(AbpMailKitModule)
       )]
     public class WebModule : AbpModule
     {
@@ -36,8 +38,9 @@ namespace ProjectGuard.StartupFiles
 
         public override void PostInitialize()
         {
-            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-            workManager.Add(IocManager.Resolve<ProjectChecker>());
+            //var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+            //workManager.Add(IocManager.Resolve<ProjectChecker>());
+            // потом включить надо)
         }
     }
 }

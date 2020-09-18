@@ -24,6 +24,7 @@
         /// true - прошло, false - нет
         /// </summary>
         public bool Result { get; set; }
+        public string Message { get; set; }
         public Verification Verification { get; set; }
         public int VerificationId { get; set; }
     }
