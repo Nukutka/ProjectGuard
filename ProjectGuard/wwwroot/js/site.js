@@ -12,6 +12,10 @@
                 }
             });
     });
+
+    $('.dropdown').click(function () {
+        $(this).nextUntil('.dropdown').slideToggle('normal');
+    });
 });
 
 function hashFiles() {
@@ -47,4 +51,12 @@ function checkFiles() {
         }
     });
 };
+
+function selectCheckboxes(id, checked) {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i] != checked && checkboxes[i].id == id)
+            checkboxes[i].checked = checked;
+    }
+}
 

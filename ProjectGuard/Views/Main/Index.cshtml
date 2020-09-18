@@ -11,7 +11,7 @@
         </div>
         <br />
         <div class="col-lg-10 col-md-9 col-sm-8 col-12 project-space" id="projectFilesPart">
-            @await Html.PartialAsync("~/Views/Hash/ProjectFileList.cshtml", new ProjectGuard.Ef.Entities.Project())
+            @await Html.PartialAsync("~/Views/Hash/ProjectFileList.cshtml", new ProjectGuard.Models.ProjectFileListViewModel(new ProjectGuard.Ef.Entities.Project()))
         </div>
     </div>
 </body>

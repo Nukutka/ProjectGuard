@@ -31,7 +31,9 @@ namespace ProjectGuard.Controllers
                 .Include(p => p.HashValues)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
 
-            return PartialView("~/Views/Hash/ProjectFileList.cshtml", project);
+            var projectFileListViewModel = _projectService.GetProjectFilesViewModel(project);
+
+            return PartialView("~/Views/Hash/ProjectFileList.cshtml", projectFileListViewModel);
         }
 
         [HttpPost]

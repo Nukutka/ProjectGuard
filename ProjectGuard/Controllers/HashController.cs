@@ -9,11 +9,13 @@ namespace ProjectGuard.Controllers
     public class HashController : BaseController
     {
         private readonly FileHashService _fileHashService;
+        private readonly ProjectService _projectService;
 
-        public HashController(DataService dataService, FileHashService fileHashService)
+        public HashController(DataService dataService, FileHashService fileHashService, ProjectService projectService)
             : base(dataService)
         {
             _fileHashService = fileHashService;
+            _projectService = projectService;
         }
 
         [HttpPost]
@@ -25,7 +27,9 @@ namespace ProjectGuard.Controllers
                 .Include(p => p.HashValues)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
 
-            return PartialView("~/Views/Hash/ProjectFileList.cshtml", project);
+            var projectFileListViewModel = _projectService.GetProjectFilesViewModel(project);
+
+            return PartialView("~/Views/Hash/ProjectFileList.cshtml", projectFileListViewModel);
         }
 
         [HttpPost]
@@ -38,7 +42,9 @@ namespace ProjectGuard.Controllers
                 .Include(p => p.HashValues)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
 
-            return PartialView("~/Views/Hash/ProjectFileList.cshtml", project);
+            var projectFileListViewModel = _projectService.GetProjectFilesViewModel(project);
+
+            return PartialView("~/Views/Hash/ProjectFileList.cshtml", projectFileListViewModel);
         }
     }
 }
