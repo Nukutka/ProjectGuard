@@ -38,8 +38,8 @@ namespace ProjectGuard.StartupFiles
 
         public override void PostInitialize()
         {
-            //var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-            //workManager.Add(IocManager.Resolve<ProjectChecker>());
+            var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
+            workManager.Add(IocManager.Resolve<ProjectChecker>());
             // потом включить надо)
         }
     }

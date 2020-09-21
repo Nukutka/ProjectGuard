@@ -2,6 +2,7 @@
 using Abp.Domain.Uow;
 using Abp.Threading.BackgroundWorkers;
 using Abp.Threading.Timers;
+using Microsoft.Extensions.Configuration;
 using ProjectGuard.Ef.Entities;
 using ProjectGuard.Services.Email;
 using System;
@@ -14,15 +15,17 @@ namespace ProjectGuard.Services.Background
         private readonly FileHashService _fileHashService;
         private readonly DataService _dataService;
         private readonly EmailSender _emailSender;
+        private readonly IConfiguration _configuration;
 
-        public ProjectChecker(AbpTimer timer, FileHashService fileHashService, DataService dataService, EmailSender emailSender)
+        public ProjectChecker(AbpTimer timer, FileHashService fileHashService, DataService dataService, EmailSender emailSender, IConfiguration configuration)
             : base(timer)
         {
-            // TODO: appsettings
-            timer.Period = (int)TimeSpan.Parse("00:00:00").TotalMilliseconds;
             _fileHashService = fileHashService;
             _dataService = dataService;
             _emailSender = emailSender;
+            _configuration = configuration;
+            var period = _configuration.GetSection("Background:Period").Value;
+            timer.Period = (int)TimeSpan.Parse(period).TotalMilliseconds;
         }
 
         [UnitOfWork]

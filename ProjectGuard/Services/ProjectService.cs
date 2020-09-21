@@ -43,7 +43,6 @@ namespace ProjectGuard.Services
         /// <param name="project">Include ProjectFiles</param>
         public async Task<ProjectFileListViewModel> GetProjectFilesViewModel(int projectId)
         {
-            // TODO: result
             var project = await _dataService.GetAllQuery<Project>()
                 .Include(p => p.HashValues)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
