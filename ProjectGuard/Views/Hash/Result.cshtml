@@ -1,0 +1,39 @@
+﻿@model ProjectGuard.Ef.Entities.Verification
+@{
+    ViewData["Title"] = "Результат проверки";
+}
+
+@if (Model.Result)
+{
+    <script>alert("Проверка пройдена");</script>
+}
+else
+{
+    <script>alert("Проверка не пройдена");</script>
+
+    <div class="row project-table-head">
+        <div class="col-3">Файл</div>
+        <div class="col-3">Сообщение об ошибке</div>
+        <div class="col-3"></div>
+    </div>
+
+    @foreach (var fileCheckResult in Model.FileCheckResults)
+    {
+        @if (!fileCheckResult.Result)
+        {
+            <div class="row project-table-data-row">
+                <div class="col-3 data-name">
+                    <i class="fas fa-file project-file-icon"></i>
+                    <a href="" title="">@fileCheckResult.HashValue.FileName</a>
+
+                </div>
+
+                <div class="col-3 data-name">@fileCheckResult.Message</div>
+                <div class="col-3 data-name"></div>
+            </div>
+        }
+    }
+}
+
+
+

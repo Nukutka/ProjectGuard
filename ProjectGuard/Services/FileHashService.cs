@@ -1,7 +1,6 @@
 ﻿using Abp.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using ProjectGuard.Ef.Entities;
-using ProjectGuard.Models.Requests;
 using ProjectGuard.Services.Security;
 using System.Collections.Generic;
 using System.IO;
@@ -53,6 +52,7 @@ namespace ProjectGuard.Services
                 if (hashValue.NeedHash)
                 {
                     var fileCheckResult = new FileCheckResult(hashValue.Id);
+                    fileCheckResult.HashValue = hashValue;
 
                     var fileBytes = File.ReadAllBytes(hashValue.FileName);
                     var hash = Streebog.GetHashCode(fileBytes);

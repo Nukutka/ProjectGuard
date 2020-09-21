@@ -30,10 +30,9 @@ namespace ProjectGuard.Controllers
         [HttpPost]
         public async Task<IActionResult> CheckFiles(int[] hashValueIds, int projectId)
         {
-            await _fileHashService.CheckFileHashesAsync(projectId);
-            var projectFileListViewModel = await _projectService.GetProjectFilesViewModel(projectId);
-
-            return PartialView("~/Views/Hash/ProjectFileList.cshtml", projectFileListViewModel);
+            var verification = await _fileHashService.CheckFileHashesAsync(projectId);
+           
+            return PartialView("~/Views/Hash/Result.cshtml", verification);
         }
 
         [HttpPost]
