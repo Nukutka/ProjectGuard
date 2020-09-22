@@ -7,61 +7,64 @@
     <div class="col-3"></div>
 </div>
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "filesForm" }))
+@if (Model.ProjectDirectory.HashValueRows.Count != 0 || Model.ProjectDirectory.ProjectDirectories.Count != 0)
 {
-    @Html.Hidden("projectId", Model.Project.Id)
-
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "filesForm" }))
     {
-        int checkboxId = 0;
-        foreach (var projectDirectoryRow in Model.GetProjectDirectories(Model.ProjectDirectory).Reverse())
+        @Html.Hidden("projectId", Model.Project.Id)
         {
-            checkboxId++;
-            var dirSpace = projectDirectoryRow.Offset;
-            <div class="dropdown">
-                <div class="row project-table-data-row">
-                    <div class="col data-name">
-                        @for (int i = 0; i < projectDirectoryRow.Offset; i++)
-                        {
-                            <span class="mx-2"></span>
-                        }
-                        <i class="fas fa-folder project-file-icon"></i>
-                        <a href="" title="">@projectDirectoryRow.ProjectDirectory.Name</a>
-                    </div>
-
-                    <div class="col">
-                        <input type="checkbox" id="@checkboxId" onClick="selectCheckboxes(this.id, this.checked)">
-                    </div>
-
-                    <div class="col data-name">-</div>
-                    <div class="col data-name"></div>
-                </div>
-            </div>
-
-            @foreach (var hashValue in projectDirectoryRow.ProjectDirectory.HashValueRows)
+            int checkboxId = 0;
+            foreach (var projectDirectoryRow in Model.GetProjectDirectories(Model.ProjectDirectory).Reverse())
             {
-                var fileSpace = projectDirectoryRow.Offset + 1;
-                <div class="row project-table-data-row">
-                    <div class="col data-name">
-                        @for (int i = 0; i < projectDirectoryRow.Offset + 1; i++)
-                        {
-                            <span class="mx-2"></span>
-                        }
-                        <i class="fas fa-file project-file-icon"></i>
-                        <a href="" title="">@hashValue.ShortName</a>
-                    </div>
+                checkboxId++;
+                var dirSpace = projectDirectoryRow.Offset;
+                <div class="dropdown">
+                    <div class="row project-table-data-row">
+                        <div class="col data-name">
+                            @for (int i = 0; i < projectDirectoryRow.Offset; i++)
+                            {
+                                <span class="mx-2"></span>
+                            }
+                            <i class="fas fa-folder project-file-icon"></i>
+                            <a href="" title="">@projectDirectoryRow.ProjectDirectory.Name</a>
+                        </div>
 
-                    <div class="col">
-                        <input type="checkbox" value="@hashValue.Id" checked="@hashValue.NeedHash" id="@checkboxId" name="hashValueIds" onClick="changeFileNeedHash(@hashValue.Id, this.checked)">
-                    </div>
+                        <div class="col">
+                            <input type="checkbox" id="@checkboxId" onClick="selectCheckboxes(this.id, this.checked)">
+                        </div>
 
-                    <div class="col data-name">@hashValue.Hash</div>
-                    <div class="col data-name"></div>
+                        <div class="col data-name">-</div>
+                        <div class="col data-name"></div>
+                    </div>
                 </div>
+
+                @foreach (var hashValue in projectDirectoryRow.ProjectDirectory.HashValueRows)
+                {
+                    var fileSpace = projectDirectoryRow.Offset + 1;
+                    <div class="row project-table-data-row">
+                        <div class="col data-name">
+                            @for (int i = 0; i < projectDirectoryRow.Offset + 1; i++)
+                            {
+                                <span class="mx-2"></span>
+                            }
+                            <i class="fas fa-file project-file-icon"></i>
+                            <a href="" title="">@hashValue.ShortName</a>
+                        </div>
+
+                        <div class="col">
+                            <input type="checkbox" value="@hashValue.Id" checked="@hashValue.NeedHash" id="@checkboxId" name="hashValueIds" onClick="changeFileNeedHash(@hashValue.Id, this.checked)">
+                        </div>
+
+                        <div class="col data-name">@hashValue.Hash</div>
+                        <div class="col data-name"></div>
+                    </div>
+                }
             }
-        }
-        <div class="row">
-            <button type="button" class="btn btn-dark button-marg" onclick="hashFiles()">Хешировать</button>
-            <button type="button" class="btn btn-dark button-marg" onclick="checkFiles()">Проверить</button>
-        </div>
-    };
+            <div class="row">
+                <button type="button" class="btn btn-dark button-marg" onclick="hashFiles()">Хешировать</button>
+                <button type="button" class="btn btn-dark button-marg" onclick="checkFiles()">Проверить</button>
+                <button type="button" class="btn btn-danger button-marg" onclick="deleteProject()">Удалить</button>
+            </div>
+        };
+    }
 }

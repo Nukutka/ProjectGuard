@@ -36,9 +36,14 @@ namespace ProjectGuard.Controllers
         public async Task<IActionResult> AddProject(string name, string path)
         {
             await _projectService.AddProjectAsync(name, path);
-            var indexViewModel = await CreateIndexViewModel();
 
-            return View("~/Views/Main/Index.cshtml", indexViewModel);
+            return RedirectToAction("Index", "Main");
+        }
+
+        [HttpPost]
+        public async Task DeleteProject(int projectId)
+        {
+            await _projectService.DeleteProjectAsync(projectId);
         }
     }
 }

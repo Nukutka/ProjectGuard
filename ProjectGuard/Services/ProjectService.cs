@@ -37,6 +37,11 @@ namespace ProjectGuard.Services
             return project;
         }
 
+        public async Task DeleteProjectAsync(int projectId)
+        {
+            await _dataService.DeleteAsync<Project>(projectId);
+        }
+
         /// <summary>
         /// Создаст дерево каталогов и файлов (костыль, т.к. я не хочу ради этого править бд)
         /// </summary>

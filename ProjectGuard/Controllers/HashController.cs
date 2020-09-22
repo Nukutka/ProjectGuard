@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ProjectGuard.Ef.Entities;
 using ProjectGuard.Services;
 
 namespace ProjectGuard.Controllers
@@ -19,7 +17,7 @@ namespace ProjectGuard.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> HashFiles(int[] hashValueIds, int projectId)
+        public async Task<IActionResult> HashFiles(int projectId)
         {
             await _fileHashService.SetControlHashesAsync(projectId);
             var projectFileListViewModel = await _projectService.GetProjectFilesViewModel(projectId);
@@ -28,7 +26,7 @@ namespace ProjectGuard.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckFiles(int[] hashValueIds, int projectId)
+        public async Task<IActionResult> CheckFiles(int projectId)
         {
             var verification = await _fileHashService.CheckFileHashesAsync(projectId);
            

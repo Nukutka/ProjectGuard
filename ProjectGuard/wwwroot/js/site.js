@@ -52,6 +52,22 @@ function checkFiles() {
     });
 };
 
+function deleteProject() {
+    var formdata = $("#filesForm").serialize();
+
+    $.ajax({
+        url: "/Project/DeleteProject",
+        type: "POST",
+        dataType: 'text',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        data: formdata,
+
+        success: function () {
+            window.location.href = "/";
+        }
+    });
+};
+
 function selectCheckboxes(id, checked) {
     var checkboxes = document.querySelectorAll('input[type="checkbox"]');
     for (var i = 0; i < checkboxes.length; i++) {
