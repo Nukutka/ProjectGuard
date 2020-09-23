@@ -14,52 +14,68 @@
         @Html.Hidden("projectId", Model.Project.Id)
         {
             int checkboxId = 0;
-            foreach (var projectDirectoryRow in Model.GetProjectDirectories(Model.ProjectDirectory).Reverse())
-            {
-                checkboxId++;
-                var dirSpace = projectDirectoryRow.Offset;
-                <div class="dropdown">
-                    <div class="row project-table-data-row">
-                        <div class="col data-name">
-                            @for (int i = 0; i < projectDirectoryRow.Offset; i++)
-                            {
-                                <span class="mx-2"></span>
-                            }
-                            <i class="fas fa-folder project-file-icon"></i>
-                            <a href="" title="">@projectDirectoryRow.ProjectDirectory.Name</a>
-                        </div>
+            <ul id="myUL">
+                @{
+                    void PrintDirectory(ProjectDirectory projectDirectoryRoot, int offset = 0)
+                    {
+                        <li>
+                            <div class="row project-table-data-row caret">
+                                <div class="col data-name">
+                                    @for (int i = 0; i < offset; i++)
+                                    {
+                                        <span class="mx-2"></span>
+                                    }
+                                    <i class="fas fa-folder project-file-icon"></i>
+                                    <a class="custom-drop">@projectDirectoryRoot.Name</a>
+                                </div>
 
-                        <div class="col">
-                            <input type="checkbox" id="@checkboxId" onClick="selectCheckboxes(this.id, this.checked)">
-                        </div>
+                                <div class="col">
+                                    <input type="checkbox" id="@checkboxId" onchange="setChildCheckboxes(this.id, this.checked);">
+                                </div>
 
-                        <div class="col data-name">-</div>
-                        <div class="col data-name"></div>
-                    </div>
-                </div>
+                                <div class="col data-name">-</div>
+                                <div class="col data-name"></div>
+                            </div>
 
-                @foreach (var hashValue in projectDirectoryRow.ProjectDirectory.HashValueRows)
-                {
-                    var fileSpace = projectDirectoryRow.Offset + 1;
-                    <div class="row project-table-data-row">
-                        <div class="col data-name">
-                            @for (int i = 0; i < projectDirectoryRow.Offset + 1; i++)
-                            {
-                                <span class="mx-2"></span>
-                            }
-                            <i class="fas fa-file project-file-icon"></i>
-                            <a href="" title="">@hashValue.ShortName</a>
-                        </div>
+                            @{var nestedId = "nested" + @checkboxId++;}
+                            <ul class="nested" id="@nestedId">
+                                @foreach (var projectDirectory in projectDirectoryRoot.ProjectDirectories)
+                                {
+                                    PrintDirectory(projectDirectory, offset + 1);
+                                }
 
-                        <div class="col">
-                            <input type="checkbox" value="@hashValue.Id" checked="@hashValue.NeedHash" id="@checkboxId" name="hashValueIds" onClick="changeFileNeedHash(@hashValue.Id, this.checked)">
-                        </div>
+                                @foreach (var hashValue in projectDirectoryRoot.HashValueRows)
+                                {
+                                    <li>
+                                        <div class="row project-table-data-row">
+                                            <div class="col data-name">
+                                                @for (int i = 0; i < offset + 1; i++)
+                                                {
+                                                    <span class="mx-2"></span>
+                                                }
+                                                <i class="fas fa-file project-file-icon"></i>
+                                                <a>@hashValue.ShortName</a>
+                                            </div>
 
-                        <div class="col data-name">@hashValue.Hash</div>
-                        <div class="col data-name"></div>
-                    </div>
+                                            <div class="col">
+                                                <input type="checkbox" class="not-directory" value="@hashValue.Id" checked="@hashValue.NeedHash" name="hashValueIds" onClick="changeFileNeedHash(@hashValue.Id, this.checked)">
+                                            </div>
+
+                                            <div class="col data-name">@hashValue.Hash</div>
+                                            <div class="col data-name"></div>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    foreach (var projectDirectory in Model.ProjectDirectory.ProjectDirectories)
+                    {
+                        PrintDirectory(projectDirectory);
+                    }
                 }
-            }
+            </ul>
+
             <div class="row">
                 <button type="button" class="btn btn-dark button-marg" onclick="hashFiles()">Хешировать</button>
                 <button type="button" class="btn btn-dark button-marg" onclick="checkFiles()">Проверить</button>
@@ -68,3 +84,38 @@
         };
     }
 }
+
+<script>
+    $(document).ready(function () {
+        addToggleToCarets();
+
+        $(".nested").each(function () {
+            var array = [];
+            var checkboxId = $(this).prop('id').replace('nested', '');
+
+            $(this).find(':checkbox').each(function () {
+                if ($(this).prop('class') == 'not-directory') {
+                    array.push($(this).prop('checked'));
+                }
+            });
+
+            if (array.every(a => a == true)) {
+                $("#" + checkboxId).prop('checked', true);
+            }
+        });
+    });
+
+    function setChildCheckboxes(id, checked) {
+        var nestedId = "#nested" + id;
+        var array = [];
+
+        $(nestedId).find(":checkbox").each(function () {
+            $(this).prop('checked', checked);
+            if ($(this).prop('class') == 'not-directory') {
+                array.push({ fileId: parseInt($(this).prop('value')), needHash: $(this).prop('checked') });
+            }
+        });
+
+        changeFilesNeedHash(array);
+    }
+</script>

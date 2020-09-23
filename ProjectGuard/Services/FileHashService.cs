@@ -1,8 +1,11 @@
 ﻿using Abp.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using ProjectGuard.Ef.Entities;
+using ProjectGuard.Models;
 using ProjectGuard.Services.Security;
+using SharpHash.Base;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +32,14 @@ namespace ProjectGuard.Services
                 if (hashValue.NeedHash)
                 {
                     var fileBytes = File.ReadAllBytes(hashValue.FileName);
-                    var hash = Streebog.GetHashCode(fileBytes);
+                    var sw = Stopwatch.StartNew();
+
+                    var test = HashFactory.Crypto.CreateGOST3411_2012_256();
+                    var hash = test.ComputeBytes(fileBytes).ToString(); //Streebog.GetHashCode(fileBytes);
+
+                    sw.Stop();
+                    Debug.WriteLine(sw.Elapsed.TotalSeconds);
+
                     hashValue.Hash = hash;
                 }
             }
@@ -88,6 +98,21 @@ namespace ProjectGuard.Services
         {
             var hashValue = await _dataService.GetAsync<HashValue>(fileId);
             hashValue.NeedHash = needHash;
+        }
+
+        public async Task ChangeFilesNeedHash(List<FileNeedHash> needHashes)
+        {
+            var fileIds = needHashes.Select(n => n.FileId);
+
+            var hashValues = await _dataService.GetAllQuery<HashValue>()
+                .Where(h => fileIds.Contains(h.Id))
+                .ToListAsync();
+
+            foreach (var fileNeedHash in needHashes)
+            {
+                var hashValue = hashValues.Find(h => h.Id == fileNeedHash.FileId);
+                hashValue.NeedHash = fileNeedHash.NeedHash;
+            }
         }
     }
 }

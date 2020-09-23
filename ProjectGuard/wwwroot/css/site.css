@@ -182,3 +182,21 @@
     margin-right: 10px;
     display: block;
 }
+
+ul, li {
+    padding: 0;
+    list-style: none;
+}
+
+
+.caret-down::before {
+    display: none;
+}
+
+.nested {
+    display: none;
+}
+
+.active {
+    display: block;
+}

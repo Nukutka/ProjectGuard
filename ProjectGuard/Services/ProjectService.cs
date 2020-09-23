@@ -62,6 +62,7 @@ namespace ProjectGuard.Services
                 var directories = filePathSplitted.Take(filePathSplitted.Length - 1).ToArray(); // директории
                 var fileName = filePathSplitted.LastOrDefault();
 
+                var parentDirectory = new ProjectDirectory("", null);
                 var tmpProjectDirectories = projectDirectories;
                 var projectDirectory = projectListViewModel.ProjectDirectory;
 
@@ -71,11 +72,12 @@ namespace ProjectGuard.Services
 
                     if (projectDirectory == null) // нет пути - добавляем
                     {
-                        projectDirectory = new ProjectDirectory(directory);
+                        projectDirectory = new ProjectDirectory(directory, parentDirectory);
                         tmpProjectDirectories.Add(projectDirectory);
                     }
 
                     tmpProjectDirectories = projectDirectory.ProjectDirectories; // переходим на уровень ниже
+                    parentDirectory = projectDirectory;
                 }
 
                 if (fileName != null)

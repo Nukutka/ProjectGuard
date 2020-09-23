@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ProjectGuard.Models;
 using ProjectGuard.Services;
 
 namespace ProjectGuard.Controllers
@@ -37,6 +40,12 @@ namespace ProjectGuard.Controllers
         public async Task ChangeNeedHash(int fileId, bool needHash)
         {
             await _fileHashService.ChangeFileNeedHash(fileId, needHash);
+        }
+
+        [HttpPost]
+        public async Task ChangeNeedHashs([FromBody] IEnumerable<FileNeedHash> model)
+        {
+            await _fileHashService.ChangeFilesNeedHash(model.ToList());
         }
     }
 }
