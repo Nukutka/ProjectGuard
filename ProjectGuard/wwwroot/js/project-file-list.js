@@ -1,18 +1,44 @@
 ﻿$(document).ready(function () {
-    $('.li-clickable').click(function () {
-        $.ajax(
-            {
-                url: 'Project/SelectProject',
-                type: 'GET',
-                data: { projectId: $(this).val() },
+    $(".caret").each(function () {
+        var liId = "#" + $(this).prop('id').replace('caret', 'li');
+        $(this).click(function () {
+            $(liId).find(".nested:first").each(function () {
+                $(this).toggleClass("active");
+            })
 
-                success: function (partialView) {
-                    $('#projectFilesPart').html(partialView);
-                    $('#projectFilesPart').show();
-                }
-            });
+            $(this).toggleClass("caret-down");
+        });
+    });
+
+    $(".nested").each(function () {
+        var array = [];
+        var checkboxId = $(this).prop('id').replace('nested', '');
+
+        $(this).find(':checkbox').each(function () {
+            if ($(this).prop('class') == 'not-directory') {
+                array.push($(this).prop('checked'));
+            }
+        });
+
+        if (array.every(a => a == true)) {
+            $("#" + checkboxId).prop('checked', true);
+        }
     });
 });
+
+function setChildCheckboxes(id, checked) {
+    var nestedId = "#nested" + id;
+    var array = [];
+
+    $(nestedId).find(":checkbox").each(function () {
+        $(this).prop('checked', checked);
+        if ($(this).prop('class') == 'not-directory') {
+            array.push({ fileId: parseInt($(this).prop('value')), needHash: $(this).prop('checked') });
+        }
+    });
+
+    changeFilesNeedHash(array);
+}
 
 function hashFiles() {
     var projectId = $("#filesForm").children('#projectId').prop('value');
@@ -64,12 +90,6 @@ function deleteProject() {
     });
 };
 
-$(function () {
-    $(":checkbox").change(function () {
-        $(this).children(':checkbox').attr('checked', this.checked);
-    });
-});
-
 function changeFileNeedHash(fileId, needHash) {
     $.ajax({
         url: "/Hash/ChangeNeedHash",
@@ -88,4 +108,3 @@ function changeFilesNeedHash(model) {
         dataType: "json",
     });
 }
-

@@ -1,5 +1,7 @@
 ﻿@model ProjectGuard.Models.ProjectFileListViewModel
 
+<script src="~/js/project-file-list.js" asp-append-version="true"></script>
+
 <div class="row project-table-head">
     <div class="col-3">Файл</div>
     <div class="col-3">Требуется проверка</div>
@@ -13,13 +15,13 @@
     {
         @Html.Hidden("projectId", Model.Project.Id)
         {
-            int checkboxId = 0;
+            int id = 0;
             <ul id="myUL">
                 @{
                     void PrintDirectory(ProjectDirectory projectDirectoryRoot, int offset = 0)
                     {
-                        var liId = "li" + checkboxId;
-                        var caretId = "caret" + checkboxId;
+                        var liId = "li" + id;
+                        var caretId = "caret" + id;
                         <li id="@liId">
                             <div class="row project-table-data-row">
                                 <div class="col data-name">
@@ -32,14 +34,14 @@
                                 </div>
 
                                 <div class="col">
-                                    <input type="checkbox" id="@checkboxId" onchange="setChildCheckboxes(this.id, this.checked);">
+                                    <input type="checkbox" id="@id" onchange="setChildCheckboxes(this.id, this.checked);">
                                 </div>
 
                                 <div class="col data-name">-</div>
                                 <div class="col data-name"></div>
                             </div>
 
-                            @{var nestedId = "nested" + @checkboxId++;}
+                            @{var nestedId = "nested" + id++;}
                             <ul class="nested" id="@nestedId">
                                 @foreach (var projectDirectory in projectDirectoryRoot.ProjectDirectories)
                                 {
@@ -86,47 +88,3 @@
         };
     }
 }
-
-<script>
-    $(document).ready(function () {
-        $(".caret").each(function () {
-            var liId = "#" + $(this).prop('id').replace('caret', 'li');
-            $(this).click(function () {
-                $(liId).find(".nested:first").each(function () {
-                    $(this).toggleClass("active");
-                })
-
-                $(this).toggleClass("caret-down");
-            });
-        });
-
-        $(".nested").each(function () {
-            var array = [];
-            var checkboxId = $(this).prop('id').replace('nested', '');
-
-            $(this).find(':checkbox').each(function () {
-                if ($(this).prop('class') == 'not-directory') {
-                    array.push($(this).prop('checked'));
-                }
-            });
-
-            if (array.every(a => a == true)) {
-                $("#" + checkboxId).prop('checked', true);
-            }
-        });
-    });
-
-    function setChildCheckboxes(id, checked) {
-        var nestedId = "#nested" + id;
-        var array = [];
-
-        $(nestedId).find(":checkbox").each(function () {
-            $(this).prop('checked', checked);
-            if ($(this).prop('class') == 'not-directory') {
-                array.push({ fileId: parseInt($(this).prop('value')), needHash: $(this).prop('checked') });
-            }
-        });
-
-        changeFilesNeedHash(array);
-    }
-</script>

@@ -2,8 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectGuard.Ef.Entities;
 using ProjectGuard.Models;
-using ProjectGuard.Services.Security;
-using SharpHash.Base;
+using SharpHash.Base;   
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -35,7 +34,7 @@ namespace ProjectGuard.Services
                     var sw = Stopwatch.StartNew();
 
                     var provider = HashFactory.Crypto.CreateGOST3411_2012_256();
-                    var hash = provider.ComputeBytes(fileBytes).ToString(); //Streebog.GetHashCode(fileBytes);
+                    var hash = provider.ComputeBytes(fileBytes).ToString();
 
                     sw.Stop();
                     Debug.WriteLine(sw.Elapsed.TotalSeconds);
@@ -45,7 +44,6 @@ namespace ProjectGuard.Services
             }
         }
 
-        // TODO: поменять модель
         public async Task<Verification> CheckFileHashesAsync(int projectId)
         {
             var hashValues = await _dataService.GetAllQuery<HashValue>()
@@ -66,7 +64,7 @@ namespace ProjectGuard.Services
 
                     var fileBytes = File.ReadAllBytes(hashValue.FileName);
                     var provider = HashFactory.Crypto.CreateGOST3411_2012_256();
-                    var hash = provider.ComputeBytes(fileBytes).ToString(); //Streebog.GetHashCode(fileBytes);
+                    var hash = provider.ComputeBytes(fileBytes).ToString();
 
                     if (hashValue.Hash == null)
                     {

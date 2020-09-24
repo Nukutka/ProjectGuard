@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<ProjectGuard.Ef.Entities.Project>
 
+<script src="~/js/project-list.js" asp-append-version="true"></script>
+
 <div class="project-list">Проекты</div>
 <ul class="list-rectangle">
     @foreach (var project in Model)
@@ -10,4 +12,3 @@
 
 @Html.ActionLink("Добавить", "AddProject", "Project", null, new { @class = "btn btn-dark", @role = "button", @type = "button" })
 
-    

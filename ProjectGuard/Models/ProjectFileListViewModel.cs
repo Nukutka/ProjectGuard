@@ -7,7 +7,7 @@ namespace ProjectGuard.Models
     {
         public ProjectFileListViewModel(Project project)
         {
-            ProjectDirectory = new ProjectDirectory("", null);
+            ProjectDirectory = new ProjectDirectory("");
             Project = project;
         }
 
@@ -17,17 +17,14 @@ namespace ProjectGuard.Models
 
     public class ProjectDirectory
     {
-        public ProjectDirectory(string name, ProjectDirectory parentDirectory)
+        public ProjectDirectory(string name)
         {
             ProjectDirectories = new List<ProjectDirectory>();
             HashValueRows = new List<HashValueRow>();
             Name = name;
-            ParentDirectory = parentDirectory;
         }
 
-        public string Path { get; set; }
         public string Name { get; }
-        public ProjectDirectory ParentDirectory { get; set; }
         public List<ProjectDirectory> ProjectDirectories { get; set; }
         public List<HashValueRow> HashValueRows { get; set; }
     }
