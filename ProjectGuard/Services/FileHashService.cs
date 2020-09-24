@@ -34,8 +34,8 @@ namespace ProjectGuard.Services
                     var fileBytes = File.ReadAllBytes(hashValue.FileName);
                     var sw = Stopwatch.StartNew();
 
-                    var test = HashFactory.Crypto.CreateGOST3411_2012_256();
-                    var hash = test.ComputeBytes(fileBytes).ToString(); //Streebog.GetHashCode(fileBytes);
+                    var provider = HashFactory.Crypto.CreateGOST3411_2012_256();
+                    var hash = provider.ComputeBytes(fileBytes).ToString(); //Streebog.GetHashCode(fileBytes);
 
                     sw.Stop();
                     Debug.WriteLine(sw.Elapsed.TotalSeconds);
@@ -65,7 +65,8 @@ namespace ProjectGuard.Services
                     fileCheckResult.HashValue = hashValue;
 
                     var fileBytes = File.ReadAllBytes(hashValue.FileName);
-                    var hash = Streebog.GetHashCode(fileBytes);
+                    var provider = HashFactory.Crypto.CreateGOST3411_2012_256();
+                    var hash = provider.ComputeBytes(fileBytes).ToString(); //Streebog.GetHashCode(fileBytes);
 
                     if (hashValue.Hash == null)
                     {
