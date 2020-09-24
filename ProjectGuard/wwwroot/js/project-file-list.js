@@ -41,6 +41,19 @@ function setChildCheckboxes(id, checked) {
 }
 
 function hashFiles() {
+    if ($('#button-hash').children().hasClass('preloader-size')
+        || $('#button-check').children().hasClass('preloader-size')
+        || $('#button-delete').children().hasClass('preloader-size')) {
+        alert('Дождитесь завершения операции.');
+        return;
+    }
+
+    var preloader =
+        '<div class="spinner-border text-light preloader-size" role="status">' +
+        '<span class="sr-only">Loading...</span>' +
+        '</div>';
+    $("#button-hash").html(preloader);
+
     var projectId = $("#filesForm").children('#projectId').prop('value');
 
     $.ajax({
@@ -58,6 +71,19 @@ function hashFiles() {
 };
 
 function checkFiles() {
+    if ($('#button-hash').children().hasClass('preloader-size')
+        || $('#button-check').children().hasClass('preloader-size')
+        || $('#button-delete').children().hasClass('preloader-size')) {
+        alert('Дождитесь завершения операции.');
+        return;
+    }
+
+    var preloader =
+        '<div class="spinner-border text-light preloader-size" role="status">' +
+        '<span class="sr-only">Loading...</span>' +
+        '</div>';
+    $("#button-check").html(preloader);
+
     var projectId = $("#filesForm").children('#projectId').prop('value');
 
     $.ajax({
@@ -75,6 +101,19 @@ function checkFiles() {
 };
 
 function deleteProject() {
+    if ($('#button-hash').children().hasClass('preloader-size')
+        || $('#button-check').children().hasClass('preloader-size')
+        || $('#button-delete').children().hasClass('preloader-size')) {
+        alert('Дождитесь завершения операции.');
+        return;
+    }
+
+    var preloader =
+        '<div class="spinner-border text-light preloader-size" role="status">' +
+        '<span class="sr-only">Loading...</span>' +
+        '</div>';
+    $("#button-delete").html(preloader);
+
     var projectId = $("#filesForm").children('#projectId').prop('value');
 
     $.ajax({

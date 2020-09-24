@@ -22,6 +22,8 @@ namespace ProjectGuard.Services
 
         public async Task SetControlHashesAsync(int projectId)
         {
+            var sw = Stopwatch.StartNew();
+
             var hashValues = await _dataService.GetAllQuery<HashValue>()
                 .Where(h => h.ProjectId == projectId)
                 .ToListAsync();
@@ -31,21 +33,22 @@ namespace ProjectGuard.Services
                 if (hashValue.NeedHash)
                 {
                     var fileBytes = File.ReadAllBytes(hashValue.FileName);
-                    var sw = Stopwatch.StartNew();
 
                     var provider = HashFactory.Crypto.CreateGOST3411_2012_256();
                     var hash = provider.ComputeBytes(fileBytes).ToString();
 
-                    sw.Stop();
-                    Debug.WriteLine(sw.Elapsed.TotalSeconds);
-
                     hashValue.Hash = hash;
                 }
             }
+
+            sw.Stop();
+            Debug.WriteLine(sw.Elapsed.TotalSeconds);
         }
 
         public async Task<Verification> CheckFileHashesAsync(int projectId)
         {
+            var sw = Stopwatch.StartNew();
+
             var hashValues = await _dataService.GetAllQuery<HashValue>()
                 .Where(h => h.ProjectId == projectId)
                 .ToListAsync();
@@ -89,6 +92,8 @@ namespace ProjectGuard.Services
             }
 
             await _dataService.InsertAsync<Verification>(verification);
+            sw.Stop();
+            Debug.WriteLine(sw.Elapsed.TotalSeconds);
 
             return verification;
         }

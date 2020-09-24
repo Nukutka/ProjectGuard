@@ -200,3 +200,13 @@ ul, li {
 .active {
     display: block;
 }
+
+.button-preloader {
+    min-height: 30px;
+    min-width : 120px;
+}
+
+.preloader-size {
+    height: 25px;
+    width: 25px;
+}
