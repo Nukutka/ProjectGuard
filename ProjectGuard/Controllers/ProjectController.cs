@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectGuard.Ef.Entities;
@@ -6,6 +7,7 @@ using ProjectGuard.Services;
 
 namespace ProjectGuard.Controllers
 {
+    [Authorize]
     public class ProjectController : BaseController
     {
         private readonly ProjectService _projectService;

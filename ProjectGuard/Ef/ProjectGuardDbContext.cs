@@ -1,6 +1,8 @@
 ﻿using Abp.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ProjectGuard.Ef.Entities;
+using ProjectGuard.Ef.Extensions;
+using ProjectGuard.Ef.Seeds;
 
 namespace ProjectGuard.Ef
 {
@@ -16,6 +18,8 @@ namespace ProjectGuard.Ef
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ConfigureUser().AddUsers();
+
             base.OnModelCreating(modelBuilder);
         }
     }

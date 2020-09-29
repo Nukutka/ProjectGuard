@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProjectGuard.Ef;
@@ -9,9 +10,10 @@ using ProjectGuard.Ef;
 namespace ProjectGuard.Migrations
 {
     [DbContext(typeof(ProjectGuardDbContext))]
-    partial class ProjectGuardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200929093334_UserEntity")]
+    partial class UserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

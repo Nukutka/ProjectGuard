@@ -1,6 +1,7 @@
 using System;
 using Abp.AspNetCore;
 using Abp.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,12 @@ namespace ProjectGuard
                 DbContextOptionsConfigurer.Configure(options.DbContextOptions, options.ConnectionString);
             });
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Auth/Login");
+                });
+
             return services.AddAbp<WebModule>();
         }
 
@@ -57,7 +64,8 @@ namespace ProjectGuard
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();   
+            app.UseAuthorization();    
 
             app.UseEndpoints(endpoints =>
             {

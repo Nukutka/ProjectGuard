@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectGuard.Models;
 using ProjectGuard.Services;
 
 namespace ProjectGuard.Controllers
 {
+    [Authorize]
     public class HashController : BaseController
     {
         private readonly FileHashService _fileHashService;
