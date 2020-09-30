@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using ProjectGuard.Services.Utils;
+using System;
 
 namespace ProjectGuard.Ef
 {
@@ -10,7 +11,7 @@ namespace ProjectGuard.Ef
         public ProjectGuardDbContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<ProjectGuardDbContext>();
-            var configuration = AppSettingsManager.Get();
+            var configuration = AppSettingsManager.Get(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
             DbContextOptionsConfigurer.Configure(builder, configuration.GetConnectionString("PostgreSQL"));
 
             return new ProjectGuardDbContext(builder.Options);
