@@ -6,6 +6,7 @@ using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Threading.BackgroundWorkers;
 using Microsoft.Extensions.Configuration;
+using ProjectGuard.Ef.Utils;
 using ProjectGuard.Services.Background;
 
 namespace ProjectGuard.StartupFiles
@@ -29,6 +30,7 @@ namespace ProjectGuard.StartupFiles
             Configuration.Modules.AbpWebCommon().SendAllExceptionsToClients = true;
             Configuration.Authorization.IsEnabled = false;
             Configuration.DefaultNameOrConnectionString = _configuration.GetConnectionString("PostgreSQL");
+            Automigrator.Migrate(Configuration.DefaultNameOrConnectionString);
         }
 
         public override void Initialize()
