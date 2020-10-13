@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectGuard.Ef.Entities;
 using ProjectGuard.Models;
-using SharpHash.Base;   
+using SharpHash.Base;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -65,26 +65,31 @@ namespace ProjectGuard.Services
                     var fileCheckResult = new FileCheckResult(hashValue.Id);
                     fileCheckResult.HashValue = hashValue;
 
-                    var fileBytes = File.ReadAllBytes(hashValue.FileName);
-                    var provider = HashFactory.Crypto.CreateGOST3411_2012_256();
-                    var hash = provider.ComputeBytes(fileBytes).ToString();
+                    var checkFile = File.Exists(hashValue.FileName);
 
-                    if (hashValue.Hash == null)
+                    if (!checkFile)
                     {
                         verification.Result = false;
                         fileCheckResult.Result = false;
-                        fileCheckResult.Message = "Контрольное значения для файла отсутсвует.";
-                    }
-                    else if (hashValue.Hash != hash)
-                    {
-                        verification.Result = false;
-                        fileCheckResult.Result = false;
-                        fileCheckResult.Message = "Контрольное значение не совпадает с текущим.";
+                        fileCheckResult.Message = "Файл отсутствует.";
                     }
                     else
                     {
-                        fileCheckResult.Result = true;
-                        fileCheckResult.Message = "Нормас";
+                        var fileBytes = File.ReadAllBytes(hashValue.FileName);
+                        var provider = HashFactory.Crypto.CreateGOST3411_2012_256();
+                        var hash = provider.ComputeBytes(fileBytes).ToString();
+
+                        if (hashValue.Hash != hash)
+                        {
+                            verification.Result = false;
+                            fileCheckResult.Result = false;
+                            fileCheckResult.Message = "Контрольное значение не совпадает с текущим.";
+                        }
+                        else
+                        {
+                            fileCheckResult.Result = true;
+                            fileCheckResult.Message = "Нормас";
+                        }
                     }
 
                     verification.FileCheckResults.Add(fileCheckResult);

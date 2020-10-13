@@ -18,6 +18,31 @@
             int id = 0;
             <ul id="myUL">
                 @{
+                    void PrintHashValues(ProjectDirectory projectDirectoryRoot, int offset)
+                    {
+                        @foreach (var hashValue in projectDirectoryRoot.HashValueRows)
+                        {
+                            <li>
+                                <div class="row project-table-data-row">
+                                    <div class="col data-name">
+                                        @for (int i = 0; i < offset + 1; i++)
+                                        {
+                                            <span class="mx-2"></span>
+                                        }
+                                        <i class="fas fa-file project-file-icon"></i>
+                                        <a>@hashValue.ShortName</a>
+                                    </div>
+
+                                    <div class="col">
+                                        <input type="checkbox" class="not-directory" value="@hashValue.Id" checked="@hashValue.NeedHash" name="hashValueIds" onClick="changeFileNeedHash(@hashValue.Id, this.checked)">
+                                    </div>
+
+                                    <div class="col data-name">@hashValue.Hash</div>
+                                    <div class="col data-name"></div>
+                                </div>
+                            </li>
+                        }
+                    }
                     void PrintDirectory(ProjectDirectory projectDirectoryRoot, int offset = 0)
                     {
                         var liId = "li" + id;
@@ -48,28 +73,10 @@
                                     PrintDirectory(projectDirectory, offset + 1);
                                 }
 
-                                @foreach (var hashValue in projectDirectoryRoot.HashValueRows)
-                                {
-                                    <li>
-                                        <div class="row project-table-data-row">
-                                            <div class="col data-name">
-                                                @for (int i = 0; i < offset + 1; i++)
-                                                {
-                                                    <span class="mx-2"></span>
-                                                }
-                                                <i class="fas fa-file project-file-icon"></i>
-                                                <a>@hashValue.ShortName</a>
-                                            </div>
-
-                                            <div class="col">
-                                                <input type="checkbox" class="not-directory" value="@hashValue.Id" checked="@hashValue.NeedHash" name="hashValueIds" onClick="changeFileNeedHash(@hashValue.Id, this.checked)">
-                                            </div>
-
-                                            <div class="col data-name">@hashValue.Hash</div>
-                                            <div class="col data-name"></div>
-                                        </div>
-                                    </li>
+                                @{
+                                    PrintHashValues(projectDirectoryRoot, offset);
                                 }
+
                             </ul>
                         </li>
                     }
@@ -77,6 +84,7 @@
                     {
                         PrintDirectory(projectDirectory);
                     }
+                    PrintHashValues(Model.ProjectDirectory, -1);
                 }
             </ul>
 
